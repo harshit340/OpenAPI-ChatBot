@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import {useEffect,useState ,ReactNode, createContext, useContext } from 'react'
+import { loginUser } from '../helper/api-communication';
 type User = {
     name: string;
     email: string;
@@ -25,9 +27,16 @@ export const AuthProvider = ({children} : {children:ReactNode})=>{
    // fetch if the user cookies are valid then skip login
    },[]);
 
-   
-   const login = async (email: string, password:string) => {};
+   const login = async (email: string, password:string) => {
+    const data = await loginUser(email,password);
+    if(data){
+        setUser({email:data.email ,name:data.name});
+        setIsLoggedIn(true);
+    }
+   };
+
    const signup = async (name : string, email: string , password:string) => {};
+   
    const logout = async ()=> {};
  
    const value = {
