@@ -6,12 +6,13 @@ import {toast} from 'react-hot-toast'
 import { useAuth } from '../context/AuthContext';
 
 function Login() {
+  
 const auth = useAuth()
-const HandleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
+const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
  e.preventDefault();
- const Fromdata =  new FormData(e.currentTarget);
- const email = Fromdata.get("email") as string;
- const password = Fromdata.get("password") as string;
+ const formData =  new FormData(e.currentTarget);
+ const email = formData.get("email") as string;
+ const password = formData.get("password") as string;
  try {
  
    await auth?.login(email, password);
@@ -20,7 +21,9 @@ const HandleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
    console.log(error);
    toast.error("Failed to login")
  }
-}
+};
+
+
 
 
   return (
@@ -36,7 +39,7 @@ const HandleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
       mt={16}
     >
       <form
-        onSubmit={HandleSubmit}
+        onSubmit={handleSubmit}
         style={{
           margin: "auto",
           padding: "30px",
