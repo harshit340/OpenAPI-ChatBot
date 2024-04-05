@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import {useEffect,useState ,ReactNode, createContext, useContext } from 'react'
-import { loginUser } from '../helper/api-communication';
+import { checkauthentication, loginUser } from '../helper/api-communication';
 type User = {
     name: string;
     email: string;
@@ -22,9 +22,16 @@ const AuthContext = createContext<UserAuth|null>(null);
 export const AuthProvider = ({children} : {children:ReactNode})=>{
    const [user,setUser] = useState<User | null>(null);
    const [isLoggedIn,setIsLoggedIn] = useState(false);
-
+   
+ // to check authentication and remain login for the user
    useEffect(()=>{
-   // fetch if the user cookies are valid then skip login
+   async function checkstatus() {
+    const data = await checkauthentication();
+    if(data){
+        setUser({email:data.email ,name:data.name});
+        setIsLoggedIn(true);
+    }
+   } checkstatus();
    },[]);
 
    const login = async (email: string, password:string) => {
