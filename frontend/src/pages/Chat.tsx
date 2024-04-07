@@ -1,8 +1,28 @@
+import  {  useRef, useState } from "react";
 import {Box, Avatar, Typography, Button, IconButton } from "@mui/material";
 import { useAuth } from "../context/AuthContext";
 import red from "@mui/material/colors/red";
+import ChatItem from "../components/chat/ChatItem";
+import { IoMdSend } from "react-icons/io";
+import { sendChatRequest } from "../helper/api-communication";
+type Message = {
+    role: "user" | "assistant";
+    content: string;
+  };
 const Chat = () =>{
+    const inputRef = useRef<HTMLInputElement | null>(null)
   const auth = useAuth();
+  const [chatMessages, setChatMessages] = useState<Message[]>([]);
+  const handleSubmit =  async () =>{
+    const content = inputRef.current?.value as string;
+    if(inputRef && inputRef.current){
+        inputRef.current.value = "";
+    }
+    const newMessage:Message = { role: "user" , content };
+    setChatMessages((prev) => [...prev, newMessage]);
+    const chatData = await sendChatRequest(content);
+    setChatMessages([...chatData.chats]);
+  };
     return (
         <Box
         sx={{
@@ -101,6 +121,10 @@ const Chat = () =>{
             scrollBehavior: "smooth",
           }}
         >
+             {chatMessages.map((chat, index) => (
+            
+            <ChatItem content={chat.content} role={chat.role} key={index} />
+          ))}
          
         </Box>
         <div
@@ -112,6 +136,23 @@ const Chat = () =>{
             margin: "auto",
           }}
         >
+             {" "}
+          <input
+            ref={inputRef}
+            type="text"
+            style={{
+              width: "100%",
+              backgroundColor: "transparent",
+              padding: "30px",
+              border: "none",
+              outline: "none",
+              color: "white",
+              fontSize: "20px",
+            }}
+          />
+          <IconButton onClick={handleSubmit} sx={{ color: "white", mx: 1 }}>
+            <IoMdSend />
+          </IconButton>
         
         </div>
       </Box>
