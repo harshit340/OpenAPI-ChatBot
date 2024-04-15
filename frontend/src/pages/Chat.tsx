@@ -1,4 +1,4 @@
-import  {  useEffect, useLayoutEffect, useRef, useState } from "react";
+import  {   useEffect, useLayoutEffect, useRef, useState } from "react";
 import {Box, Avatar, Typography, Button, IconButton } from "@mui/material";
 import { useAuth } from "../context/AuthContext";
 import red from "@mui/material/colors/red";
@@ -7,7 +7,7 @@ import { IoMdSend } from "react-icons/io";
 import { deleteUserChats, getUserChats, sendChatRequest } from "../helper/api-communication";
 import toast from "react-hot-toast";
 import { Navigate } from "react-router-dom";
-
+ 
 type Message = {
     role: "user" | "assistant";
     content: string;
@@ -42,13 +42,12 @@ const Chat = () => {
       });
     }
   },[auth]);
-  
- /*  useEffect(()=>{
-    if(!auth?.user){
-      return Navigate("/login");
-    }
-  },[auth]) */
 
+useEffect(() => {
+  if (!auth?.user) {
+    return <Navigate to="/login" />;
+  }
+}, [auth]);
   const handleDeleteChats = async() => {
     try {
       toast.loading("deleting chats");

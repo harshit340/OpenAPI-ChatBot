@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import {useEffect,useState ,ReactNode, createContext, useContext } from 'react'
-import { checkauthentication, loginUser } from '../helper/api-communication';
+import { checkauthentication, loginUser, logoutUser } from '../helper/api-communication';
 type User = {
     name: string;
     email: string;
@@ -44,7 +44,12 @@ export const AuthProvider = ({children} : {children:ReactNode})=>{
 
    const signup = async (name : string, email: string , password:string) => {};
    
-   const logout = async ()=> {};
+   const logout = async ()=> {
+    await logoutUser();
+    setIsLoggedIn(false);
+    setUser(null);
+    window.location.reload();
+   };
  
    const value = {
     user,
