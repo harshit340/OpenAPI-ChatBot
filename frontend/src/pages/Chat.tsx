@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import red from "@mui/material/colors/red";
 import ChatItem from "../components/chat/ChatItem";
 import { IoMdSend } from "react-icons/io";
-import { getUserChats, sendChatRequest } from "../helper/api-communication";
+import { deleteUserChats, getUserChats, sendChatRequest } from "../helper/api-communication";
 import toast from "react-hot-toast";
 type Message = {
     role: "user" | "assistant";
@@ -40,6 +40,18 @@ const Chat = () => {
       });
     }
   },[auth]);
+
+  const handleDeleteChats = async() => {
+    try {
+      toast.loading("deleting chats");
+      await deleteUserChats();
+      setChatMessages([]);
+      toast.success("successfully chats are deleted")
+    } catch (error) {
+      console.log(error);
+      toast.error("Unable to delete chats")
+    }
+  }
     return (
         <Box
         sx={{
@@ -87,7 +99,7 @@ const Chat = () => {
             Education, etc. But avoid sharing personal information
           </Typography>
           <Button
-           
+            onClick={handleDeleteChats}
             sx={{
               width: "200px",
               my: "auto",
