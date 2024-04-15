@@ -9,19 +9,22 @@ type Message = {
     role: "user" | "assistant";
     content: string;
   };
-const Chat = () =>{
+const Chat = () => {
     const inputRef = useRef<HTMLInputElement | null>(null)
   const auth = useAuth();
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const handleSubmit =  async () =>{
+    console.log(inputRef.current?.value);
     const content = inputRef.current?.value as string;
     if(inputRef && inputRef.current){
-        inputRef.current.value = "";
+        inputRef.current.value = " ";
     }
     const newMessage:Message = { role: "user" , content };
     setChatMessages((prev) => [...prev, newMessage]);
     const chatData = await sendChatRequest(content);
     setChatMessages([...chatData.chat]);
+
+    
   };
     return (
         <Box
